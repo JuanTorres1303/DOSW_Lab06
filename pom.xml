@@ -21,7 +21,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.11.0</version>
+        <version>5.11.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -40,9 +40,63 @@
       <artifactId>junit-jupiter-params</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- Engine required to run JUnit 5 tests with Maven Surefire -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
+    <sourceDirectory>Library/src/main/java</sourceDirectory>
+    <testSourceDirectory>Library/src/test/java</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.12</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>/configurators/</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jacoco-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <rule>
+                  <element>PACKAGE</element>
+                  <limits>
+                    <limit>
+                      <counter>CLASS</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0.85</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->

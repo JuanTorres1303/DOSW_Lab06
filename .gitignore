@@ -420,7 +420,9 @@ FodyWeavers.xsd
 # =================================================================
 # Maven Support
 # =================================================================
-target/
+target/*
+!target/site/
+!target/site/**
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
