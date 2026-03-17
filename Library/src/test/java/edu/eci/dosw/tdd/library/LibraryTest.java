@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.beans.Transient;
+
 public class LibraryTest {
 
     private Library library;
@@ -14,13 +16,23 @@ public class LibraryTest {
         library = new Library();
     }
 
-    @Test
+
+     @Test
     public void shouldReturnFalseWhenAddingNullBook() {
         boolean result = library.addBook(null);
         assertFalse(result);
     }
 
     @Test
+    public void shouldReturnNullWhenUserAlreadyHasActiveLoanForSameBook() {
+        Loan result = library.loanABook("userWithActiveLoan", "isbnAlreadyLoaned");
+        assertNull(result);
+    }
+
+}
+
+
+
     public void loanABook() {
         final String respuesta = "PRESTAMO EXITOSO CON USUARIO VALIDO Y LIBRO DISPONIBLE";
         Library library = new Library();
