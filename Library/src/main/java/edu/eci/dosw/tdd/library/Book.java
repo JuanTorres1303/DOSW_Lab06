@@ -4,22 +4,32 @@ public class Book {
     private final String tittle;
     private final String author;
     private final String isbn;
+    private int quantity;
+
     public Book(String tittle, String author, String isbn) {
         this.tittle = tittle;
         this.author = author;
         this.isbn = isbn;
     }
+
     public String getTittle() {
         return tittle;
     }
+
     public String getAuthor() {
         return author;
     }
+
     public String getIsbn() {
         return isbn;
     }
+
     @Override
     public boolean equals(Object obj) {
-        return isbn.equals(((Book)obj).isbn);
+        return isbn.equals(((Book) obj).isbn);
+    }
+
+    public void addBook(Book book) {
+        quantity++;
     }
 }
