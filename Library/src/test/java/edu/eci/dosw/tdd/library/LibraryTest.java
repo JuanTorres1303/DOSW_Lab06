@@ -1,6 +1,9 @@
 package edu.eci.dosw.tdd.library;
 
 import edu.eci.dosw.tdd.library.book.Book;
+import edu.eci.dosw.tdd.library.loan.Loan;
+import edu.eci.dosw.tdd.library.loan.LoanStatus;
+import edu.eci.dosw.tdd.library.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,93 +12,164 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LibraryTest {
 
     private Library library;
+    private Book book;
+    private User user;
 
     @BeforeEach
     void setUp() {
         library = new Library();
+        book = new Book("Test", "Author", "123");
+        user = new User("Daniel", "1");
+        library.addUser(user);
     }
 
     @Test
-    void shouldReturnFalseWhenAddingNullBook() {
-        boolean result = library.addBook(null);
-        assertFalse(result);
+    void shouldAddBookSuccessfully() {
+        assertTrue(library.addBook(book));
     }
 
     @Test
-    void shouldReturnFalseWhenAddingBookWithEmptyIsbn() {
-        Book book = new Book("Clean Code", "Robert Martin", "");
-        boolean result = library.addBook(book);
-        assertFalse(result);
+    void shouldNotAddBookWithNull() {
+        assertFalse(library.addBook(null));
+    }
+
+    @Test
+    void shouldNotAddBookWithEmptyIsbn() {
+        Book invalid = new Book("Test", "Author", "");
+        assertFalse(library.addBook(invalid));
     }
 
     @Test
     void shouldIncreaseQuantityWhenAddingDuplicateBook() {
-        Book book = new Book("Clean Code", "Robert Martin", "978-0132350884");
-
-        boolean firstAdd = library.addBook(book);
-        boolean secondAdd = library.addBook(book);
-
-        assertTrue(firstAdd);
-        assertTrue(secondAdd);
-    }
-
-    @Test
-    void shouldReturnNullWhenUserAlreadyHasActiveLoanForSameBook() {
-        User user = new User("Carlos", "user-001");
-        library.addUser(user);
-
-        Book book = new Book("Clean Code", "Robert Martin", "978-0132350884");
         library.addBook(book);
-
-        library.loanABook("user-001", "978-0132350884");
-        Loan result = library.loanABook("user-001", "978-0132350884");
-
-        assertNull(result);
-    }
-
-    @Test
-    void shouldReturnNullWhenLoaningUnavailableBook() {
-        User user1 = new User("Carlos", "user-001");
-        library.addUser(user1);
-
-        Book book = new Book("Clean Code", "Robert Martin", "978-0132350884");
         library.addBook(book);
-
-        library.loanABook("user-001", "978-0132350884");
-
-        User user2 = new User("Ana", "user-002");
-        library.addUser(user2);
-
-        Loan result = library.loanABook("user-002", "978-0132350884");
-
-        assertNull(result);
+        assertEquals(2, book.getQuantity());
     }
 
     @Test
     void shouldLoanBookSuccessfully() {
-        User user = new User("Camilo Leon", "CL123456789");
-        library.addUser(user);
-
-        Book book = new Book("El coronel no tiene quien le escriba", "Gabriel Garcia Marquez", "bf1212354586913");
         library.addBook(book);
-
-        Loan loan = library.loanABook(user.getId(), book.getIsbn());
+        Loan loan = library.loanABook("1", "123");
 
         assertNotNull(loan);
+        assertEquals(book, loan.getBook());
+        assertEquals(user, loan.getUser());
+        assertEquals(LoanStatus.ACTIVE, loan.getStatus());
+    }
+
+    @Test
+    void shouldDecreaseQuantityWhenLoaning() {
+        library.addBook(book);
+        library.loanABook("1", "123");
+
+        assertEquals(0, book.getQuantity());
+    }
+
+    @Test
+    void shouldNotLoanIfUserDoesNotExist() {
+        library.addBook(book);
+        assertNull(library.loanABook("999", "123"));
+    }
+
+    @Test
+    void shouldNotLoanIfBookDoesNotExist() {
+        assertNull(library.loanABook("1", "999"));
+    }
+
+    @Test
+    void shouldNotLoanSameBookTwiceToSameUser() {
+        library.addBook(book);
+        library.addBook(book);
+
+        library.loanABook("1", "123");
+        Loan second = library.loanABook("1", "123");
+
+        assertNull(second);
     }
 
     @Test
     void shouldReturnLoanSuccessfully() {
-        User user = new User("Camilo Leon", "CL123456789");
-        library.addUser(user);
-
-        Book book = new Book("Clean Code", "Robert Martin", "978-01");
         library.addBook(book);
+        Loan loan = library.loanABook("1", "123");
 
-        Loan loan = library.loanABook("CL123456789", "978-01");
         Loan returned = library.returnLoan(loan);
 
         assertNotNull(returned);
         assertEquals(LoanStatus.RETURNED, returned.getStatus());
+    }
+
+    @Test
+    void shouldIncreaseQuantityWhenReturning() {
+        library.addBook(book);
+        Loan loan = library.loanABook("1", "123");
+
+        library.returnLoan(loan);
+
+        assertEquals(1, book.getQuantity());
+    }
+
+    @Test
+    void shouldNotReturnNullLoan() {
+        assertNull(library.returnLoan(null));
+    }
+
+    @Test
+    void shouldNotReturnLoanNotInSystem() {
+        assertNull(library.returnLoan(new Loan()));
+    }
+
+    @Test
+    void shouldCreateUserCorrectly() {
+        User u = new User("Daniel", "1");
+        assertEquals("Daniel", u.getName());
+        assertEquals("1", u.getId());
+    }
+
+    @Test
+    void shouldUpdateUserFields() {
+        User u = new User("Daniel", "1");
+        u.setName("Carlos");
+        u.setId("2");
+
+        assertEquals("Carlos", u.getName());
+        assertEquals("2", u.getId());
+    }
+
+    @Test
+    void usersWithSameIdShouldBeEqual() {
+        User u1 = new User("A", "1");
+        User u2 = new User("B", "1");
+
+        assertEquals(u1, u2);
+        assertEquals(u1.hashCode(), u2.hashCode());
+    }
+
+    @Test
+    void bookEqualsShouldWorkByIsbn() {
+        Book b1 = new Book("A", "Auth", "123");
+        Book b2 = new Book("B", "Auth", "123");
+
+        assertEquals(b1, b2);
+    }
+
+    @Test
+    void loanStatusHelpersShouldWork() {
+        Loan loan = new Loan();
+
+        loan.setStatus(LoanStatus.ACTIVE);
+        assertTrue(loan.isActive());
+        assertFalse(loan.isReturned());
+
+        loan.setStatus(LoanStatus.RETURNED);
+        assertTrue(loan.isReturned());
+        assertFalse(loan.isActive());
+    }
+
+    @Test
+    void loanEqualsShouldWork() {
+        Loan l1 = new Loan();
+        Loan l2 = new Loan();
+
+        assertEquals(l1, l2);
     }
 }

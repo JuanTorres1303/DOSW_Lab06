@@ -2,7 +2,9 @@ package edu.eci.dosw.tdd.library.loan;
 
 import edu.eci.dosw.tdd.library.book.Book;
 import edu.eci.dosw.tdd.library.user.User;
+
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Loan {
     private Book book;
@@ -49,5 +51,28 @@ public class Loan {
 
     public void setReturnDate(LocalDateTime returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public boolean isActive() {
+        return status == LoanStatus.ACTIVE;
+    }
+
+    public boolean isReturned() {
+        return status == LoanStatus.RETURNED;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Loan)) return false;
+        Loan loan = (Loan) o;
+        return Objects.equals(book, loan.book) &&
+               Objects.equals(user, loan.user) &&
+               Objects.equals(loanDate, loan.loanDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(book, user, loanDate);
     }
 }

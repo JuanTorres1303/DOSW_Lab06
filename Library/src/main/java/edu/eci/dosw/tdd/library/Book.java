@@ -1,5 +1,7 @@
 package edu.eci.dosw.tdd.library.book;
 
+import java.util.Objects;
+
 public class Book {
     private final String tittle;
     private final String author;
@@ -10,6 +12,7 @@ public class Book {
         this.tittle = tittle;
         this.author = author;
         this.isbn = isbn;
+        this.quantity = 1;
     }
 
     public String getTittle() {
@@ -24,12 +27,30 @@ public class Book {
         return isbn;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return isbn.equals(((Book) obj).isbn);
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void addBook(Book book) {
+    public void incrementQuantity() {
         quantity++;
+    }
+
+    public void decrementQuantity() {
+        if (quantity > 0) {
+            quantity--;
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Book)) return false;
+        Book book = (Book) obj;
+        return Objects.equals(isbn, book.isbn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isbn);
     }
 }
