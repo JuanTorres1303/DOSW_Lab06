@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Book.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Library</a> &gt; <a href="index.source.html" class="el_package">edu.eci.dosw.tdd.library</a> &gt; <span class="el_source">Book.java</span></div><h1>Book.java</h1><pre class="source lang-java linenums">package edu.eci.dosw.tdd.library;
+
+import java.util.Objects;
+
+public class Book {
+    private final String tittle;
+    private final String author;
+    private final String isbn;
+    private int quantity;
+
+<span class="fc" id="L11">    public Book(String tittle, String author, String isbn) {</span>
+<span class="fc" id="L12">        this.tittle = tittle;</span>
+<span class="fc" id="L13">        this.author = author;</span>
+<span class="fc" id="L14">        this.isbn = isbn;</span>
+<span class="fc" id="L15">        this.quantity = 1;</span>
+<span class="fc" id="L16">    }</span>
+
+    public String getTittle() {
+<span class="nc" id="L19">        return tittle;</span>
+    }
+
+    public String getAuthor() {
+<span class="nc" id="L23">        return author;</span>
+    }
+
+    public String getIsbn() {
+<span class="fc" id="L27">        return isbn;</span>
+    }
+
+    public int getQuantity() {
+<span class="fc" id="L31">        return quantity;</span>
+    }
+
+    public void incrementQuantity() {
+<span class="fc" id="L35">        quantity++;</span>
+<span class="fc" id="L36">    }</span>
+
+    public void decrementQuantity() {
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (quantity &gt; 0) {</span>
+<span class="fc" id="L40">            quantity--;</span>
+        }
+<span class="fc" id="L42">    }</span>
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (this == obj) {</span>
+<span class="fc" id="L47">            return true;</span>
+        }
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (!(obj instanceof Book)) {</span>
+<span class="nc" id="L50">            return false;</span>
+        }
+<span class="fc" id="L52">        Book other = (Book) obj;</span>
+<span class="fc" id="L53">        return Objects.equals(isbn, other.isbn);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L58">        return Objects.hash(isbn);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

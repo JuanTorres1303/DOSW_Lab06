@@ -1,4 +1,4 @@
-package edu.eci.dosw.tdd.library.book;
+package edu.eci.dosw.tdd.library;
 
 import java.util.Objects;
 
@@ -43,10 +43,14 @@ public class Book {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Book)) return false;
-        Book book = (Book) obj;
-        return Objects.equals(isbn, book.isbn);
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Book)) {
+            return false;
+        }
+        Book other = (Book) obj;
+        return Objects.equals(isbn, other.isbn);
     }
 
     @Override

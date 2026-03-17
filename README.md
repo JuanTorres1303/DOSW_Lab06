@@ -88,3 +88,34 @@ La integración se realizó mediante Maven usando el plugin de Sonar.
 
 ## Ejecución
 Para compilar el proyecto:
+
+
+## SonarQube instalacion 
+
+1. Instalacion
+Para esto necesitamos tener instalado en nuestro computador docker desktop, teniendo esto ya realizado abrimos power shell en nuestro computador y copiamos estos comandos:
+ a. docker pull sonarqube:community
+ b. docker volume create sonarqube_data
+ c. docker volume create sonarqube_extensions
+ d. docker volume create sonarqube_logs
+ e. docker run -d `
+  --name sonarqube `
+  -p 9000:9000 `
+  -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true `
+  -v sonarqube_data:/opt/sonarqube/data `
+  -v sonarqube_extensions:/opt/sonarqube/extensions `
+  -v sonarqube_logs:/opt/sonarqube/logs `
+  sonarqube:community
+
+2. despues de esto abrimos nuestro docker y nuestro navegador de confianza.
+![alt text](./Docs/images/image-3.png)
+1. en el navegador escribimos http://localhost:9000
+segun el puerto que hayamos utilizado para este caso 
+![alt text](./Docs/images/image-2.png)
+apenas abramos el nos va a pedir un usuario y una contraseña seran ambas admin, despues las cambiamos y generamos las de nuestra confianza.
+
+1. generamos el token visible para que lo podamos pegar y compilar dentro de nuestro proyecto en el tipo de token lo añadiremos como Global Analysis token 
+2. ahora dentro de nuestro Visual vamos ejecutar el siguiente comando:
+   1. mvn --% clean verify sonar:sonar -Dsonar.token=AQUI_TU_TOKEN_REAL y esto nos genera un proyecto en SonarQube con el podemos ver ahora si nuestros porcentajes de Duplicacion de cogido y todo. 
+  ![alt text](./Docs/images/image-1.png)
+   como aparece hay. 

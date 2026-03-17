@@ -1,7 +1,4 @@
-package edu.eci.dosw.tdd.library.loan;
-
-import edu.eci.dosw.tdd.library.book.Book;
-import edu.eci.dosw.tdd.library.user.User;
+package edu.eci.dosw.tdd.library;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package edu.eci.dosw.tdd.library.user;
+package edu.eci.dosw.tdd.library;
 
 import java.util.Objects;
 
